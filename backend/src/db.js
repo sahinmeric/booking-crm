@@ -10,14 +10,14 @@ const db = new sqlite3.Database(':memory:', (err) => {
 });
 
 db.serialize(() => {
-  // Create customers table
   db.run(`CREATE TABLE IF NOT EXISTS customers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE
+            email TEXT NOT NULL,
+            phone TEXT NOT NULL
         )`, (err) => {
     if (err) {
-      console.error('Error creating customers table:', err.message);
+      console.error('Error creating table:', err.message);
     } else {
       console.log('Customers table created.');
     }
