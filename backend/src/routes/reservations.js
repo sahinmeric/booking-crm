@@ -2,15 +2,33 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db')
 
-// Get all reservations
+// Updated GET /api/reservations with full details
 router.get('/', (req, res) => {
-  db.all('SELECT * FROM reservations', [], (err, rows) => {
+  const query = `
+    SELECT 
+      reservations.id, 
+      reservations.reservationDate, 
+      reservations.numberOfPeople, 
+      customers.name AS customerName, 
+      customers.phone AS customerPhone, 
+      customers.email AS customerEmail,
+      tables.tableName, 
+      tables.tableDescription, 
+      tables.capacity, 
+      tables.tableNumber
+    FROM reservations
+    JOIN customers ON reservations.customerId = customers.id
+    JOIN tables ON reservations.tableId = tables.id;
+  `;
+
+  db.all(query, [], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
     res.json(rows);
   });
 });
+
 
 
 // Create a new reservation
