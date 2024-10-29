@@ -29,4 +29,25 @@ router.get('/', (req, res) => {
   });
 });
 
+router.delete('/:id', (req, res) => {
+  const tableId = req.params.id;
+
+  // First, delete associated reservations
+  const deleteReservationsQuery = `DELETE FROM reservations WHERE tableId = ?`;
+  db.run(deleteReservationsQuery, [tableId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    // Next, delete the table
+    const deleteTableQuery = `DELETE FROM tables WHERE id = ?`;
+    db.run(deleteTableQuery, [tableId], function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: `Table with ID ${tableId} and associated reservations have been deleted.` });
+    });
+  });
+});
+
 module.exports = router;
