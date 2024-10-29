@@ -1,12 +1,14 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
+const reservationsRouter = require('./routes/reservations');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/reservations', reservationsRouter);
 
 const db = new sqlite3.Database(':memory:', (err) => {
   if (err) {
