@@ -50,4 +50,21 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+// Update a table
+router.put('/:id', (req, res) => {
+  const tableId = req.params.id;
+  const { tableName, tableDescription, capacity, tableNumber } = req.body;
+
+  const updateTableQuery = `UPDATE tables SET tableName = ?, tableDescription = ?, capacity = ?, tableNumber = ? WHERE id = ?`;
+  db.run(updateTableQuery, [tableName, tableDescription, capacity, tableNumber, tableId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ message: `Table with ID ${tableId} not found.` });
+    }
+    res.json({ message: `Table with ID ${tableId} has been updated.` });
+  });
+});
+
 module.exports = router;
