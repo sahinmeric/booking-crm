@@ -12,17 +12,49 @@ router.get('/', (req, res) => {
   });
 });
 
+
 // Create a new reservation
 router.post('/', (req, res) => {
-  const { customer, reservationDate, numberOfPeople, tableNumber } = req.body;
-  db.run('INSERT INTO reservations (customer, reservationDate, numberOfPeople, tableNumber) VALUES (?, ?, ?, ?)',
-    [customer, reservationDate, numberOfPeople, tableNumber],
-    function (err) {
-      if (err) {
-        return res.status(500).json({ error: err.message });
+  const { customerId, tableId, reservationDate, numberOfPeople } = req.body;
+
+  // Check if the customer exists
+  const customerQuery = 'SELECT id FROM customers WHERE id = ?';
+  db.get(customerQuery, [customerId], (customerErr, customer) => {
+    if (customerErr) {
+      return res.status(500).json({ error: customerErr.message });
+    }
+    if (!customer) {
+      return res.status(400).json({ error: 'Invalid customer ID' });
+    }
+
+    // Check if the table exists
+    const tableQuery = 'SELECT id FROM tables WHERE id = ?';
+    db.get(tableQuery, [tableId], (tableErr, table) => {
+      if (tableErr) {
+        return res.status(500).json({ error: tableErr.message });
       }
-      res.status(201).json({ id: this.lastID });
+      if (!table) {
+        return res.status(400).json({ error: 'Invalid table ID' });
+      }
+
+      // If both customer and table exist, proceed to create the reservation
+      const reservationQuery = `
+        INSERT INTO reservations (customerId, tableId, reservationDate, numberOfPeople)
+        VALUES (?, ?, ?, ?)
+      `;
+      db.run(
+        reservationQuery,
+        [customerId, tableId, reservationDate, numberOfPeople],
+        function (reservationErr) {
+          if (reservationErr) {
+            return res.status(500).json({ error: reservationErr.message });
+          }
+          res.status(201).json({ id: this.lastID });
+        }
+      );
     });
+  });
 });
+
 
 module.exports = router;
