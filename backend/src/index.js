@@ -3,6 +3,7 @@ const cors = require('cors');
 const db = require('./db');
 const reservationsRouter = require('./routes/reservations');
 const tablesRouter = require('./routes/tables');
+const customersRouter = require('./routes/customers');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/reservations', reservationsRouter);
 app.use('/api/tables', tablesRouter);
+app.use('/api/customers', customersRouter);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Booking CRM API!');
