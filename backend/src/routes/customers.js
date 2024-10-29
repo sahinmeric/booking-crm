@@ -101,5 +101,21 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+router.put('/:id', (req, res) => {
+  const customerId = req.params.id;
+  const { name, phone, email } = req.body;
+
+  const updateCustomerQuery = `UPDATE customers SET name = ?, phone = ?, email = ? WHERE id = ?`;
+  db.run(updateCustomerQuery, [name, phone, email, customerId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ message: `Customer with ID ${customerId} not found.` });
+    }
+    res.json({ message: `Customer with ID ${customerId} has been updated.` });
+  });
+});
+
 
 module.exports = router;
