@@ -74,5 +74,16 @@ router.post('/', (req, res) => {
   });
 });
 
+router.delete('/:id', (req, res) => {
+  const reservationId = req.params.id;
+
+  const deleteReservationQuery = `DELETE FROM reservations WHERE id = ?`;
+  db.run(deleteReservationQuery, [reservationId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: `Reservation with ID ${reservationId} has been deleted.` });
+  });
+});
 
 module.exports = router;
