@@ -80,5 +80,26 @@ router.get('/', (req, res) => {
   });
 });
 
+router.delete('/:id', (req, res) => {
+  const customerId = req.params.id;
+
+  // First, delete associated reservations
+  const deleteReservationsQuery = `DELETE FROM reservations WHERE customerId = ?`;
+  db.run(deleteReservationsQuery, [customerId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    // Next, delete the customer
+    const deleteCustomerQuery = `DELETE FROM customers WHERE id = ?`;
+    db.run(deleteCustomerQuery, [customerId], function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: `Customer with ID ${customerId} and associated reservations have been deleted.` });
+    });
+  });
+});
+
 
 module.exports = router;
