@@ -86,4 +86,20 @@ router.delete('/:id', (req, res) => {
   });
 });
 
+router.put('/:id', (req, res) => {
+  const reservationId = req.params.id;
+  const { customerId, tableId, reservationDate, numberOfPeople } = req.body;
+
+  const updateReservationQuery = `UPDATE reservations SET customerId = ?, tableId = ?, reservationDate = ?, numberOfPeople = ? WHERE id = ?`;
+  db.run(updateReservationQuery, [customerId, tableId, reservationDate, numberOfPeople, reservationId], function (err) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ message: `Reservation with ID ${reservationId} not found.` });
+    }
+    res.json({ message: `Reservation with ID ${reservationId} has been updated.` });
+  });
+});
+
 module.exports = router;
