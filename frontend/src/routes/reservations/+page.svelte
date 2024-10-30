@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { Reservation } from '$lib/types/models';
-	import type { Customer, Table } from '$lib/types/models';
+	import type { Reservation, Customer, Table } from '$lib/types/models';
 
 	let reservations: Reservation[] = [];
 	let customers: Customer[] = [];
@@ -66,6 +65,18 @@
 			errorMessage = null;
 		} else {
 			errorMessage = 'Failed to add reservation.';
+		}
+	}
+
+	async function deleteReservation(reservationId: number) {
+		const response = await fetch(`${API_URL}/reservations/${reservationId}`, {
+			method: 'DELETE'
+		});
+
+		if (response.ok) {
+			await fetchReservations();
+		} else {
+			errorMessage = 'Failed to delete reservation.';
 		}
 	}
 
@@ -173,6 +184,10 @@
 							class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 							>People</th
 						>
+						<th
+							class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+							>Actions</th
+						>
 					</tr>
 				</thead>
 				<tbody class="bg-white divide-y divide-gray-200">
@@ -183,15 +198,21 @@
 							>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
 							<td class="px-6 py-4 whitespace-nowrap"
-								>{reservation.tableName} (Table {reservation.tableNumber})</td
+								>{reservation.tableName} (Capacity: {reservation.capacity})</td
 							>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.numberOfPeople}</td>
+							<td class="px-6 py-4 whitespace-nowrap text-right">
+								<button
+									class="text-red-600 hover:text-red-800"
+									on:click={() => deleteReservation(reservation.id)}>Delete</button
+								>
+							</td>
 						</tr>
 					{/each}
 				</tbody>
 			</table>
 		{:else}
-			<p class="text-center p-4 text-gray-500">There aren't any reservations yet.</p>
+			<p class="text-center p-4 text-gray-500">There are no reservations yet.</p>
 		{/if}
 	</div>
 </main>
