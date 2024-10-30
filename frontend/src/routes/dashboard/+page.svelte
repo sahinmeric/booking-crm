@@ -2,6 +2,8 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import CustomerPage from '../customers/+page.svelte';
 	import Tables from '../tables/+page.svelte';
+	import Reservations from '../reservations/+page.svelte';
+
 	let currentView = 'dashboard';
 
 	function handleNavigate(event: CustomEvent) {
@@ -20,7 +22,7 @@
 	{:else if currentView === 'tables'}
 		<Tables />
 	{:else if currentView === 'reservations'}
-		<h1 class="text-3xl font-bold mb-6">Reservations</h1>
+		<Reservations />
 	{/if}
 </main>
 
