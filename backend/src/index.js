@@ -5,6 +5,7 @@ const reservationsRouter = require('./routes/reservations');
 const tablesRouter = require('./routes/tables');
 const customersRouter = require('./routes/customers');
 const reportsRouter = require('./routes/reports');
+const authRouter = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use('/api/reservations', reservationsRouter);
 app.use('/api/tables', tablesRouter);
 app.use('/api/customers', customersRouter);
 app.use('/api/reports', reportsRouter);
+app.use('/api/auth', authRouter);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Booking CRM API!');
