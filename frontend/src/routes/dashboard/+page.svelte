@@ -1,20 +1,22 @@
 <script lang="ts">
 	import Navbar from '$lib/components/Navbar.svelte';
+	import CustomerPage from '../customers/+page.svelte';
 
 	let currentView = 'dashboard';
 
-	function handleNavigate(page: string) {
-		currentView = page;
+	function handleNavigate(event: CustomEvent) {
+		currentView = event.detail.view;
 	}
 </script>
 
-<Navbar onNavigate={handleNavigate} />
+<Navbar on:navigate={handleNavigate} />
 
 <main class="flex flex-col items-center p-4">
 	{#if currentView === 'dashboard'}
 		<h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+		<p>Welcome to the dashboard!</p>
 	{:else if currentView === 'customers'}
-		<h1 class="text-3xl font-bold mb-6">Customers</h1>
+		<CustomerPage />
 	{:else if currentView === 'reservations'}
 		<h1 class="text-3xl font-bold mb-6">Reservations</h1>
 	{/if}
