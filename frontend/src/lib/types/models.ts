@@ -19,4 +19,11 @@ export interface Reservation {
 	tableId: number;
 	reservationDate: string;
 	numberOfPeople: number;
+	customerName: string;
+	customerPhone: string;
+	customerEmail: string;
+	tableName: string;
+	tableDescription: string;
+	capacity: number;
+	tableNumber: number;
 }
