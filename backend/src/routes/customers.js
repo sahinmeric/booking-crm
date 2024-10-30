@@ -47,10 +47,10 @@ router.get('/', (req, res) => {
 
       if (!customer) {
         acc.push({
-          customerId: row.customerId,
-          customerName: row.customerName,
-          customerPhone: row.customerPhone,
-          customerEmail: row.customerEmail,
+          id: row.customerId,
+          name: row.customerName,
+          phone: row.customerPhone,
+          email: row.customerEmail,
           reservations: row.reservationId ? [{
             reservationId: row.reservationId,
             reservationDate: row.reservationDate,
