@@ -1,44 +1,42 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-
-	function navigateTo(route: string) {
-		goto(route);
-	}
+	export let onNavigate: (page: string) => void;
 </script>
 
-<nav class="bg-gray-800 p-4">
-	<div class="container mx-auto flex justify-between items-center">
-		<h1 class="text-white text-xl font-bold">Booking CRM</h1>
+<nav>
+	<div class="container mx-auto flex justify-between items-center h-full px-4">
+		<div class="text-xl font-bold">My App</div>
 		<ul class="flex space-x-4">
 			<li>
-				<button on:click={() => navigateTo('/customers')} class="text-gray-300 hover:text-white"
-					>Customers</button
+				<a href="#" on:click={() => onNavigate('dashboard')} class="hover:text-indigo-600"
+					>Dashboard</a
 				>
 			</li>
 			<li>
-				<button on:click={() => navigateTo('/tables')} class="text-gray-300 hover:text-white"
-					>Tables</button
+				<a href="#" on:click={() => onNavigate('customers')} class="hover:text-indigo-600"
+					>Customers</a
 				>
 			</li>
 			<li>
-				<button on:click={() => navigateTo('/reservations')} class="text-gray-300 hover:text-white"
-					>Reservations</button
+				<a href="#" on:click={() => onNavigate('reservations')} class="hover:text-indigo-600"
+					>Reservations</a
 				>
 			</li>
 			<li>
-				<button on:click={() => navigateTo('/login')} class="text-gray-300 hover:text-white"
-					>Logout</button
-				>
+				<a href="#" on:click={() => onNavigate('logout')} class="hover:text-indigo-600">Logout</a>
 			</li>
 		</ul>
 	</div>
 </nav>
 
 <style>
-	@media (max-width: 640px) {
-		nav ul {
-			flex-direction: column;
-			align-items: flex-start;
-		}
+	nav {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 60px;
+		background-color: #fff;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		z-index: 1000;
 	}
 </style>
