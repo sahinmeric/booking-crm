@@ -10,6 +10,7 @@
 	let selectedTableId: number | null = null;
 	let reservationDate = '';
 	let numberOfPeople = 2;
+	let searchTerm = '';
 	const API_URL = 'http://localhost:3000/api';
 
 	async function fetchReservations() {
@@ -80,6 +81,12 @@
 		}
 	}
 
+	$: filteredReservations = reservations.filter(
+		(reservation) =>
+			reservation.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+			reservation.tableName.toLowerCase().includes(searchTerm.toLowerCase())
+	);
+
 	onMount(async () => {
 		await fetchReservations();
 		await fetchCustomers();
@@ -118,9 +125,9 @@
 				>
 					<option value="" disabled selected>Select a table</option>
 					{#each tables as table}
-						<option value={table.id}
-							>{table.tableName} (Capacity: {table.capacity}) - {table.tableDescription}</option
-						>
+						<option value={table.id}>
+							{table.tableName} (Capacity: {table.capacity}) - {table.tableDescription}
+						</option>
 					{/each}
 				</select>
 			</div>
@@ -159,8 +166,16 @@
 			</button>
 		</form>
 	</div>
+	<div class="mb-4">
+		<input
+			type="text"
+			placeholder="Search by customer name or table name"
+			bind:value={searchTerm}
+			class="border border-gray-300 p-2 rounded-lg w-full"
+		/>
+	</div>
 	<div class="bg-white rounded-lg shadow overflow-hidden">
-		{#if reservations.length > 0}
+		{#if filteredReservations.length > 0}
 			<table class="min-w-full divide-y divide-gray-200">
 				<thead class="bg-gray-200">
 					<tr>
@@ -187,18 +202,17 @@
 					</tr>
 				</thead>
 				<tbody class="bg-white divide-y divide-gray-200">
-					{#each reservations as reservation (reservation.id)}
+					{#each filteredReservations as reservation (reservation.id)}
 						<tr>
-							<td class="px-6 py-4 whitespace-nowrap">
-								{new Date(reservation.reservationDate).toLocaleDateString()}
+							<td class="px-6 py-4 whitespace-nowrap"
+								>{new Date(reservation.reservationDate).toLocaleDateString()}
 								{new Date(reservation.reservationDate).toLocaleTimeString([], {
 									hour: '2-digit',
 									minute: '2-digit'
-								})}
-							</td><td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
-							<td class="px-6 py-4 whitespace-nowrap"
-								>{reservation.tableName} (Capacity: {reservation.capacity}) - {reservation.tableDescription}</td
+								})}</td
 							>
+							<td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
+							<td class="px-6 py-4 whitespace-nowrap">{reservation.tableName}</td>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.numberOfPeople}</td>
 							<td class="px-6 py-4 whitespace-nowrap text-right">
 								<button
@@ -211,7 +225,7 @@
 				</tbody>
 			</table>
 		{:else}
-			<p class="text-center p-4 text-gray-500">There are no reservations yet.</p>
+			<p class="text-center p-4 text-gray-500">There aren't any reservations yet.</p>
 		{/if}
 	</div>
 </main>
