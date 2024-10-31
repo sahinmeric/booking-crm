@@ -11,7 +11,20 @@
 	let reservationDate = '';
 	let numberOfPeople = 2;
 	let searchTerm = '';
+	let editingReservationId: number | null = null;
+	let isEditing: boolean = false;
+
 	const API_URL = 'http://localhost:3000/api';
+
+	function resetForm() {
+		selectedCustomerId = null;
+		selectedTableId = null;
+		reservationDate = '';
+		numberOfPeople = 2;
+		editingReservationId = null;
+		isEditing = false;
+		errorMessage = null;
+	}
 
 	async function fetchReservations() {
 		const response = await fetch(`${API_URL}/reservations`);
@@ -40,33 +53,55 @@
 		}
 	}
 
-	async function addReservation() {
+	async function saveReservation() {
 		if (!selectedCustomerId || !selectedTableId || !reservationDate || !numberOfPeople) {
 			errorMessage = 'Please fill in all required fields.';
 			return;
 		}
 
-		const response = await fetch(`${API_URL}/reservations`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				customerId: selectedCustomerId,
-				tableId: selectedTableId,
-				reservationDate,
-				numberOfPeople
-			})
-		});
+		const payload = {
+			customerId: selectedCustomerId,
+			tableId: selectedTableId,
+			reservationDate,
+			numberOfPeople
+		};
 
-		if (response.ok) {
-			await fetchReservations();
-			selectedCustomerId = null;
-			selectedTableId = null;
-			reservationDate = '';
-			numberOfPeople = 1;
-			errorMessage = null;
+		if (isEditing) {
+			const response = await fetch(`${API_URL}/reservations/${editingReservationId}`, {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload)
+			});
+
+			if (response.ok) {
+				await fetchReservations();
+				resetForm();
+			} else {
+				errorMessage = 'Failed to update reservation.';
+			}
 		} else {
-			errorMessage = 'Failed to add reservation.';
+			const response = await fetch(`${API_URL}/reservations`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload)
+			});
+
+			if (response.ok) {
+				await fetchReservations();
+				resetForm();
+			} else {
+				errorMessage = 'Failed to add reservation.';
+			}
 		}
+	}
+
+	function editReservation(reservation: Reservation) {
+		selectedCustomerId = reservation.customerId;
+		selectedTableId = reservation.tableId;
+		reservationDate = new Date(reservation.reservationDate).toISOString().slice(0, 16);
+		numberOfPeople = reservation.numberOfPeople;
+		editingReservationId = reservation.id;
+		isEditing = true;
 	}
 
 	async function deleteReservation(reservationId: number) {
@@ -99,7 +134,7 @@
 		<p class="text-red-500 text-center mb-4">{errorMessage}</p>
 	{/if}
 	<div class="mb-6 p-4 border border-gray-300 rounded-lg shadow bg-white">
-		<form on:submit|preventDefault={addReservation} class="space-y-4">
+		<form on:submit|preventDefault={saveReservation} class="space-y-4">
 			<div>
 				<label for="customer" class="block text-gray-700 font-medium mb-2">Customer</label>
 				<select
@@ -162,7 +197,7 @@
 				type="submit"
 				class="bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600 transition mx-auto block"
 			>
-				Add Reservation
+				Save Reservation
 			</button>
 		</form>
 	</div>
@@ -214,11 +249,19 @@
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.tableName}</td>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.numberOfPeople}</td>
-							<td class="px-6 py-4 whitespace-nowrap text-right">
+							<td class="px-6 py-4 whitespace-nowrap">
 								<button
-									class="text-red-600 hover:text-red-800"
-									on:click={() => deleteReservation(reservation.id)}>Delete</button
+									on:click={() => editReservation(reservation)}
+									class="bg-yellow-500 text-white p-2 rounded-lg shadow hover:bg-yellow-600 transition"
 								>
+									Edit
+								</button>
+								<button
+									on:click={() => deleteReservation(reservation.id)}
+									class="bg-red-500 text-white p-2 rounded-lg shadow hover:bg-red-600 transition ml-2"
+								>
+									Delete
+								</button>
 							</td>
 						</tr>
 					{/each}
