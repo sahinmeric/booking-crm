@@ -4,7 +4,7 @@
 	import Tables from '../tables/+page.svelte';
 	import Reservations from '../reservations/+page.svelte';
 
-	let currentView = 'dashboard';
+	let currentView = 'customers';
 
 	function handleNavigate(event: CustomEvent) {
 		currentView = event.detail.view;
@@ -14,10 +14,7 @@
 <Navbar on:navigate={handleNavigate} />
 
 <main class="flex flex-col items-center p-4">
-	{#if currentView === 'dashboard'}
-		<h1 class="text-3xl font-bold mb-6">Dashboard</h1>
-		<p>Welcome to the dashboard!</p>
-	{:else if currentView === 'customers'}
+	{#if currentView === 'customers'}
 		<CustomerPage />
 	{:else if currentView === 'tables'}
 		<Tables />
