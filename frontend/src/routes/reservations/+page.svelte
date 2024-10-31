@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { Reservation, Customer, Table } from '$lib/types/models';
+	import { downloadReservationsExcel, downloadReservationsPDF } from '$lib/api/download';
 
 	let reservations: Reservation[] = [];
 	let customers: Customer[] = [];
@@ -267,6 +268,20 @@
 					{/each}
 				</tbody>
 			</table>
+			<div class="mb-4">
+				<button
+					on:click={downloadReservationsPDF}
+					class="bg-green-500 text-white p-2 rounded-lg shadow hover:bg-green-600 transition mr-2"
+				>
+					Download as PDF
+				</button>
+				<button
+					on:click={downloadReservationsExcel}
+					class="bg-green-500 text-white p-2 rounded-lg shadow hover:bg-green-600 transition"
+				>
+					Download as Excel
+				</button>
+			</div>
 		{:else}
 			<p class="text-center p-4 text-gray-500">There aren't any reservations yet.</p>
 		{/if}
