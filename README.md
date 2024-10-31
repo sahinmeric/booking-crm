@@ -80,3 +80,19 @@ This application provides a streamlined interface for managing restaurant reserv
 ### Exporting Reservations
 
 - Click the **Download as a pdf** or **Download as a excel** button to download reservation data as PDF or Excel.
+
+## API Endpoints
+
+Here's a list of key API endpoints available for this application:
+
+| Method | Endpoint                 | Description                             |
+| ------ | ------------------------ | --------------------------------------- |
+| GET    | /api/customers           | Retrieve all customers                  |
+| POST   | /api/customers           | Add a new customer                      |
+| GET    | /api/tables              | Retrieve all tables                     |
+| POST   | /api/tables              | Add a new table                         |
+| GET    | /api/reservations        | Retrieve all reservations               |
+| POST   | /api/reservations        | Add a new reservation                   |
+| PUT    | /api/reservations/:id    | Edit an existing reservation            |
+| DELETE | /api/reservations/:id    | Delete a reservation                    |
+| GET    | /api/reservations/export | Download reservations data as PDF/Excel |
