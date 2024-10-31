@@ -1,13 +1,11 @@
-Reservation Management System
-A web application to manage customers, tables, and reservations, complete with authentication, search, and export features.
+## Table of Contents
 
-Table of Contents
-Project Overview
-Features
-Tech Stack
-Setup Instructions
-Usage
-API Endpoints
-File Structure
-Future Improvements
-License
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [File Structure](#file-structure)
+- [Future Improvements](#future-improvements)
+- [License](#license)
