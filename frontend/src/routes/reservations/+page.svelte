@@ -9,7 +9,7 @@
 	let selectedCustomerId: number | null = null;
 	let selectedTableId: number | null = null;
 	let reservationDate = '';
-	let numberOfPeople = 1;
+	let numberOfPeople = 2;
 	const API_URL = 'http://localhost:3000/api';
 
 	async function fetchReservations() {
@@ -91,11 +91,7 @@
 	{#if errorMessage}
 		<p class="text-red-500 text-center mb-4">{errorMessage}</p>
 	{/if}
-
-	<h1 class="text-2xl font-bold mb-6">Reservations</h1>
-
 	<div class="mb-6 p-4 border border-gray-300 rounded-lg shadow bg-white">
-		<h2 class="text-xl font-semibold mb-4">Create a New Reservation</h2>
 		<form on:submit|preventDefault={addReservation} class="space-y-4">
 			<div>
 				<label for="customer" class="block text-gray-700 font-medium mb-2">Customer</label>
@@ -122,7 +118,9 @@
 				>
 					<option value="" disabled selected>Select a table</option>
 					{#each tables as table}
-						<option value={table.id}>{table.tableName} (Capacity: {table.capacity})</option>
+						<option value={table.id}
+							>{table.tableName} (Capacity: {table.capacity}) - {table.tableDescription}</option
+						>
 					{/each}
 				</select>
 			</div>
@@ -140,13 +138,14 @@
 
 			<div>
 				<label for="numberOfPeople" class="block text-gray-700 font-medium mb-2"
-					>Number of People</label
+					>Expected People</label
 				>
 				<input
 					type="number"
 					id="numberOfPeople"
 					bind:value={numberOfPeople}
 					min="1"
+					max="20"
 					class="border border-gray-300 p-2 rounded-lg w-full"
 					required
 				/>
@@ -154,15 +153,12 @@
 
 			<button
 				type="submit"
-				class="bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600 transition w-full"
+				class="bg-blue-500 text-white p-2 rounded-lg shadow hover:bg-blue-600 transition mx-auto block"
 			>
 				Add Reservation
 			</button>
 		</form>
 	</div>
-
-	<h2 class="text-xl font-semibold mb-4">Reservation List</h2>
-
 	<div class="bg-white rounded-lg shadow overflow-hidden">
 		{#if reservations.length > 0}
 			<table class="min-w-full divide-y divide-gray-200">
@@ -193,12 +189,15 @@
 				<tbody class="bg-white divide-y divide-gray-200">
 					{#each reservations as reservation (reservation.id)}
 						<tr>
+							<td class="px-6 py-4 whitespace-nowrap">
+								{new Date(reservation.reservationDate).toLocaleDateString()}
+								{new Date(reservation.reservationDate).toLocaleTimeString([], {
+									hour: '2-digit',
+									minute: '2-digit'
+								})}
+							</td><td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
 							<td class="px-6 py-4 whitespace-nowrap"
-								>{new Date(reservation.reservationDate).toLocaleString()}</td
-							>
-							<td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
-							<td class="px-6 py-4 whitespace-nowrap"
-								>{reservation.tableName} (Capacity: {reservation.capacity})</td
+								>{reservation.tableName} (Capacity: {reservation.capacity}) - {reservation.tableDescription}</td
 							>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.numberOfPeople}</td>
 							<td class="px-6 py-4 whitespace-nowrap text-right">
