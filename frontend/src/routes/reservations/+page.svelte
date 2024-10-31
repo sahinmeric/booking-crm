@@ -248,7 +248,9 @@
 								})}</td
 							>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.customerName}</td>
-							<td class="px-6 py-4 whitespace-nowrap">{reservation.tableName}</td>
+							<td class="px-6 py-4 whitespace-nowrap"
+								>{reservation.tableName} - {reservation.tableDescription}</td
+							>
 							<td class="px-6 py-4 whitespace-nowrap">{reservation.numberOfPeople}</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<button
