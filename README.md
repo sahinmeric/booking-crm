@@ -83,16 +83,45 @@ This application provides a streamlined interface for managing restaurant reserv
 
 ## API Endpoints
 
-Here's a list of key API endpoints available for this application:
+Here is a list of the available API endpoints for this application:
 
-| Method | Endpoint                 | Description                             |
-| ------ | ------------------------ | --------------------------------------- |
-| GET    | /api/customers           | Retrieve all customers                  |
-| POST   | /api/customers           | Add a new customer                      |
-| GET    | /api/tables              | Retrieve all tables                     |
-| POST   | /api/tables              | Add a new table                         |
-| GET    | /api/reservations        | Retrieve all reservations               |
-| POST   | /api/reservations        | Add a new reservation                   |
-| PUT    | /api/reservations/:id    | Edit an existing reservation            |
-| DELETE | /api/reservations/:id    | Delete a reservation                    |
-| GET    | /api/reservations/export | Download reservations data as PDF/Excel |
+### Authentication
+
+| Method | Endpoint           | Description         |
+| ------ | ------------------ | ------------------- |
+| POST   | /api/auth/login    | Log in a user       |
+| POST   | /api/auth/register | Register a new user |
+
+### Customer Management
+
+| Method | Endpoint           | Description                 |
+| ------ | ------------------ | --------------------------- |
+| GET    | /api/customers     | Retrieve all customers      |
+| POST   | /api/customers     | Add a new customer          |
+| PUT    | /api/customers/:id | Update an existing customer |
+| DELETE | /api/customers/:id | Delete a customer           |
+
+### Table Management
+
+| Method | Endpoint        | Description              |
+| ------ | --------------- | ------------------------ |
+| GET    | /api/tables     | Retrieve all tables      |
+| POST   | /api/tables     | Add a new table          |
+| PUT    | /api/tables/:id | Update an existing table |
+| DELETE | /api/tables/:id | Delete a table           |
+
+### Reservation Management
+
+| Method | Endpoint              | Description                    |
+| ------ | --------------------- | ------------------------------ |
+| GET    | /api/reservations     | Retrieve all reservations      |
+| POST   | /api/reservations     | Add a new reservation          |
+| PUT    | /api/reservations/:id | Update an existing reservation |
+| DELETE | /api/reservations/:id | Delete a reservation           |
+
+### Report Export
+
+| Method | Endpoint           | Description                        |
+| ------ | ------------------ | ---------------------------------- |
+| GET    | /api/reports/pdf   | Download reservation data as PDF   |
+| GET    | /api/reports/excel | Download reservation data as Excel |
